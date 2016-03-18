@@ -29,3 +29,7 @@
     src=~/dotfiles/.zshrc
     dest=~/.zshrc
     state=link
+
+- name: change user default shell to zsh
+  become: yes
+  user: name={{ ssh_user }} shell=/usr/bin/zsh

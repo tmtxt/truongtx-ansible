@@ -2,4 +2,5 @@
 # setup for personal user
 - hosts: all
   roles:
-    - personal
+    - role: personal
+      ssh_user: tmtxt
