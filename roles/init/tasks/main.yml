@@ -1,0 +1,11 @@
+---
+- name: update apt-get
+  become: yes
+  apt: update_cache=yes cache_valid_time=43200
+
+- name: install packages
+  become: yes
+  apt: name={{ item }}
+  with_items:
+    - zsh
+    - git

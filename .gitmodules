@@ -1,3 +1,6 @@
 [submodule "roles/swapfile"]
 	path = roles/swapfile
 	url = git@github.com:kamaln7/ansible-swapfile.git
+[submodule "roles/oraclejdk"]
+	path = roles/oraclejdk
+	url = https://github.com/tmtxt/oraclejdk-ubuntu-ansible.git
