@@ -20,7 +20,7 @@
   become: yes
   lineinfile: >-
     dest=/etc/default/jenkins
-    regexp=^HTTP_PORT=8080$
+    regexp=^HTTP_PORT=
     line=HTTP_PORT={{ jenkins_port }}
   notify:
     - restart jenkins
