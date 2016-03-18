@@ -12,3 +12,5 @@
       swapfile_vfs_cache_pressure: 50
 
     - role: oraclejdk
+
+    - role: jenkins
