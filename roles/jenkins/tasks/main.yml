@@ -15,3 +15,12 @@
 - name: install jenkins
   become: yes
   apt: name=jenkins
+
+- name: update jenkins running port
+  become: yes
+  lineinfile: >-
+    dest=/etc/default/jenkins
+    regexp=^HTTP_PORT=8080$
+    line=HTTP_PORT={{ jenkins_port }}
+  notify:
+    - restart jenkins
