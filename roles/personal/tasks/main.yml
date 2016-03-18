@@ -3,6 +3,29 @@
   become: yes
   apt: update_cache=yes cache_valid_time=43200
 
-- name: install zsh for current user
+- name: install packages
   become: yes
-  apt: name=zsh
+  apt: name={{ item }}
+  with_items:
+    - zsh
+    - git
+
+- name: clone dotfiles
+  git: >-
+    repo=git@github.com:tmtxt/dotfiles.git
+    dest=~/dotfiles
+    accept_hostkey=yes
+    recursive=yes
+
+- name: clone oh my zsh
+  git: >-
+    repo=git@github.com:robbyrussell/oh-my-zsh.git
+    dest=~/.oh-my-zsh
+    accept_hostkey=yes
+    recursive=yes
+
+- name: symlink .zshrc to home folder
+  file: >-
+    src=~/dotfiles/.zshrc
+    dest=~/.zshrc
+    state=link
