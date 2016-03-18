@@ -1,0 +1,8 @@
+---
+- name: update apt-get
+  become: yes
+  apt: update_cache=yes cache_valid_time=43200
+
+- name: install zsh for current user
+  become: yes
+  apt: name=zsh

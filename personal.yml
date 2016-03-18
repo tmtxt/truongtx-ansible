@@ -1,0 +1,5 @@
+---
+# setup for personal user
+- hosts: all
+  roles:
+    - personal
