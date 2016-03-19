@@ -25,6 +25,10 @@
   notify:
     - restart jenkins
 
+- name: create log folder for nginx jenkins
+  become: yes
+  file: path=/var/log/nginx/jenkins state=directory
+
 - name: create nginx config
   become: yes
   template: >-

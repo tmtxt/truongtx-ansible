@@ -4,3 +4,6 @@
 [submodule "roles/oraclejdk"]
 	path = roles/oraclejdk
 	url = https://github.com/tmtxt/oraclejdk-ubuntu-ansible.git
+[submodule "roles/docker"]
+	path = roles/docker
+	url = https://github.com/angstwad/docker.ubuntu.git

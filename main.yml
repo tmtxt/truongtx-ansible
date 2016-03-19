@@ -1,5 +1,5 @@
 ---
-# setup for personal user
+# personal use
 - hosts: all
   roles:
     - role: init
@@ -8,15 +8,39 @@
       ssh_user: tmtxt
 
     - role: swapfile
-      become: true
+      become: yes
       swapfile_size: 2G
       swapfile_swappiness: 10
       swapfile_vfs_cache_pressure: 50
 
     - role: oraclejdk
 
+# docker
+- hosts: all
+  roles:
+    - role: docker
+      become: yes
+  tasks:
+    - name: stop docker from messing iptables rules
+      become: yes
+      lineinfile: >-
+        dest=/etc/default/docker
+        line="DOCKER_OPTS=\"--dns 8.8.8.8 --dns 8.8.4.4 --iptables=false\""
+      notify:
+        - restart docker
+  handlers:
+    - name: restart docker
+      become: yes
+      service: name=docker state=restarted
+
+# firewall
+- hosts: all
+  roles:
     - role: ufw
 
+# projects
+- hosts: all
+  roles:
     - role: jenkins
       jenkins_port: 9250
       jenkins_site_name: jenkins
