@@ -1,0 +1,10 @@
+# -*- mode: conf -*-
+server {
+       server_name           {{ jenkins_server_name }};
+       listen                80;
+       client_max_body_size  10M;
+
+       location / {
+                proxy_pass http://localhost:{{ jenkins_server_port }};
+       }
+}
