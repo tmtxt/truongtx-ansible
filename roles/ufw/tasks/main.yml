@@ -1,0 +1,17 @@
+---
+- name: allow ssh connection
+  become: yes
+  ufw: rule=allow port=ssh
+
+- name: allow http connection
+  become: yes
+  ufw: rule=allow port=80
+
+- name: deny all incoming connection
+  become: yes
+  command: ufw default deny incoming
+  changed_when: false
+
+- name: enable ufw
+  become: yes
+  ufw: state=enabled
