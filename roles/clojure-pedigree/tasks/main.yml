@@ -24,3 +24,15 @@
   notify:
     - restart nginx
 
+- name: create user for project
+  become: yes
+  user: name={{ pd_user }} groups=docker append=yes shell=/bin/bash
+
+- name: clone project git repo
+  become: yes
+  become_user: "{{ pd_user }}"
+  git: >-
+    repo=https://github.com/tmtxt/clojure-pedigree.git
+    dest=/home/{{ pd_user }}/website
+    recursive=yes
+    update=no
