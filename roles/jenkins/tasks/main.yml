@@ -53,3 +53,13 @@
     state=link
   notify:
     - restart nginx
+
+- name: add password for jenkins user
+  become: yes
+  user: name=jenkins password={{ jenkins_password }}
+
+- name: grant sudo access for jenkins user
+  become: yes
+  lineinfile: >-
+    dest=/etc/sudoers
+    line="jenkins ALL=(ALL:ALL) ALL"
