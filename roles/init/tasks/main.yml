@@ -10,3 +10,9 @@
     - zsh
     - git
     - nginx
+
+- name: install python packages
+  become: yes
+  pip: name={{ item }}
+  with_items:
+    - ansible
