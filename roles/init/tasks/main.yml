@@ -10,9 +10,13 @@
     - zsh
     - git
     - nginx
+    - python-pip
+    - python-dev
+    - ufw
+    - apt-transport-https
 
-- name: install python packages
-  become: yes
-  pip: name={{ item }}
-  with_items:
-    - ansible
+# - name: install python packages
+#   become: yes
+#   pip: name={{ item }}
+#   with_items:
+#     - ansible

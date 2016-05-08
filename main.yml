@@ -41,11 +41,11 @@
 # projects
 - hosts: all
   roles:
-    - role: jenkins
-      jenkins_port: 9250
-      jenkins_site_name: jenkins
-      jenkins_server_name: build.truongtx.me
-      jenkins_server_port: "{{ jenkins_port }}"
+#     - role: jenkins
+#       jenkins_port: 9250
+#       jenkins_site_name: jenkins
+#       jenkins_server_name: build.truongtx.me
+#       jenkins_server_port: "{{ jenkins_port }}"
 
     - role: clojure-pedigree
       pd_site_name: clojure_pedigree
