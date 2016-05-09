@@ -52,3 +52,9 @@
       pd_server_name: giapha.truongtx.me
       pd_server_port: 3000
       pd_user: pedigree
+
+    - role: jekyll-docker
+      jd_site_name: jekyll_docker
+      jd_server_name: jekyll.truongtx.me
+      jd_server_port: 17845
+      jd_user: jekyll

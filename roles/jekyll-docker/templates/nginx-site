@@ -1,0 +1,10 @@
+# -*- mode: conf -*-
+server {
+       server_name           {{ jd_server_name }};
+       listen                80;
+       client_max_body_size  10M;
+
+       location / {
+                proxy_pass http://localhost:{{ jd_server_port }};
+       }
+}
