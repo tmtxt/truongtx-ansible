@@ -1,4 +1,5 @@
 # -*- mode: conf -*-
+
 server {
        server_name           {{ jd_server_name }};
        listen                80;
@@ -6,5 +7,7 @@ server {
 
        location / {
                 proxy_pass http://localhost:{{ jd_server_port }};
+                auth_basic "Restricted Content";
+                auth_basic_user_file /etc/nginx/.htpasswd;
        }
 }

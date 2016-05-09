@@ -1,4 +1,11 @@
 ---
+- name: generate password protection for test jekyll site
+  become: yes
+  htpasswd: >-
+    path=/etc/nginx/.htpasswd
+    name={{ jd_user }}
+    password={{ jd_password }}
+
 - name: create nginx config
   become: yes
   template: >-
