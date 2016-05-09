@@ -10,13 +10,17 @@
     - zsh
     - git
     - nginx
-    - python-pip
-    - python-dev
+    - libffi-dev
+    - libssl-dev
     - ufw
     - apt-transport-https
 
-# - name: install python packages
-#   become: yes
-#   pip: name={{ item }}
-#   with_items:
-#     - ansible
+- name: install python packages
+  become: yes
+  pip: name={{ item }}
+  with_items:
+    - pyopenssl
+    - ndg-httpsclient
+    - pyasn1
+    - ansible
+    - passlib
