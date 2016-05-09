@@ -45,3 +45,18 @@
     dest=/home/{{ jd_user }}/website/blog
     recursive=yes
     update=yes
+
+- name: add some aliases
+  become: yes
+  become_user: "{{ jd_user }}"
+  lineinfile: >-
+    dest=~/.bashrc
+    line={{ item }}
+  with_items:
+    - alias dcu="docker-compose up"
+    - alias dcud="docker-compose up -d"
+    - alias dcp="docker-compose ps"
+    - alias dcr="docker-compose rm"
+    - alias dcl="docker-compose logs -f jekyll"
+    - alias dcb="docker-compose build"
+    - alias dck="docker-compose kill"
