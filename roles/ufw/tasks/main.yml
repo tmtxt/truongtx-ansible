@@ -7,6 +7,10 @@
   become: yes
   ufw: rule=allow port=80
 
+- name: allow minecraft port
+  become: yes
+  ufw: rule=allow port=25565
+
 - name: deny all incoming connection
   become: yes
   command: ufw default deny incoming

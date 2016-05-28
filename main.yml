@@ -48,10 +48,25 @@
 #       jenkins_server_port: "{{ jenkins_port }}"
 
     - role: clojure-pedigree
-      pd_site_name: clojure_pedigree
-      pd_server_name: giapha.truongtx.me
-      pd_server_port: 3000
       pd_user: pedigree
+
+      # nginx config file name
+      pd_nginx_sites:
+        - pd_web
+        - pd_kibana
+        - pd_neo4j
+
+      # config for server
+      pd_web_server: giapha.truongtx.me
+      pd_web_port: 3000
+
+      # config for kibana
+      pd_kibana_server: kibana.truongtx.me
+      pd_kibana_port: 5601
+
+      # config for neo4j
+      pd_neo4j_server: neo4j.truongtx.me
+      pd_neo4j_port: 7474
 
     - role: jekyll-docker
       jd_site_name: jekyll_docker

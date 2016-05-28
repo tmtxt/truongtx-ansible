@@ -1,0 +1,12 @@
+# -*- mode: conf -*-
+server {
+       server_name           {{ pd_kibana_server }};
+       listen                80;
+       client_max_body_size  10M;
+
+       location / {
+                proxy_pass http://localhost:{{ pd_kibana_port }};
+                auth_basic "Restricted Content";
+                auth_basic_user_file /etc/nginx/.htpasswd;
+       }
+}

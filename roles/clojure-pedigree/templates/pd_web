@@ -1,10 +1,10 @@
 # -*- mode: conf -*-
 server {
-       server_name           {{ pd_server_name }};
+       server_name           {{ pd_web_server }};
        listen                80;
        client_max_body_size  10M;
 
        location / {
-                proxy_pass http://localhost:{{ pd_server_port }};
+                proxy_pass http://localhost:{{ pd_web_port }};
        }
 }

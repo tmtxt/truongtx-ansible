@@ -1,11 +1,22 @@
 ---
+- name: generate password protection for some sites
+  become: yes
+  htpasswd: >-
+    path=/etc/nginx/.htpasswd
+    name={{ pd_user }}
+    password={{ item }}
+  with_items:
+    - "{{ pd_kibana_password }}"
+    - "{{ pd_neo4j_password }}"
+
 - name: create nginx config
   become: yes
   template: >-
-    src=nginx-site
-    dest=/etc/nginx/sites-available/{{ pd_site_name }}
+    src={{ item }}
+    dest=/etc/nginx/sites-available/{{ item }}
   notify:
     - restart nginx
+  with_items: "{{ pd_nginx_sites }}"
 
 - name: disable default site
   become: yes
@@ -18,11 +29,12 @@
 - name: enable project site
   become: yes
   file: >-
-    dest=/etc/nginx/sites-enabled/{{ pd_site_name }}
-    src=/etc/nginx/sites-available/{{ pd_site_name }}
+    dest=/etc/nginx/sites-enabled/{{ item }}
+    src=/etc/nginx/sites-available/{{ item }}
     state=link
   notify:
     - restart nginx
+  with_items: "{{ pd_nginx_sites }}"
 
 - name: create user for project
   become: yes
@@ -33,6 +45,6 @@
   become_user: "{{ pd_user }}"
   git: >-
     repo=https://github.com/tmtxt/clojure-pedigree.git
-    dest=/home/{{ pd_user }}/website
+    dest=/home/{{ pd_user }}/clojure-pedigree
     recursive=yes
     update=no
