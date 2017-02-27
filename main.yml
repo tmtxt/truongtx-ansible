@@ -9,7 +9,7 @@
 
     - role: swapfile
       become: yes
-      swapfile_size: 2G
+      swapfile_size: 4G
       swapfile_swappiness: 10
       swapfile_vfs_cache_pressure: 50
 
@@ -47,29 +47,34 @@
 #       jenkins_server_name: build.truongtx.me
 #       jenkins_server_port: "{{ jenkins_port }}"
 
-    - role: clojure-pedigree
-      pd_user: pedigree
+    # - role: clojure-pedigree
+    #   pd_user: pedigree
 
-      # nginx config file name
-      pd_nginx_sites:
-        - pd_web
-        - pd_kibana
-        - pd_neo4j
+    #   # nginx config file name
+    #   pd_nginx_sites:
+    #     - pd_web
+    #     - pd_kibana
+    #     - pd_neo4j
 
-      # config for server
-      pd_web_server: giapha.truongtx.me
-      pd_web_port: 3000
+    #   # config for server
+    #   pd_web_server: giapha.truongtx.me
+    #   pd_web_port: 3000
 
-      # config for kibana
-      pd_kibana_server: kibana.truongtx.me
-      pd_kibana_port: 5601
+    #   # config for kibana
+    #   pd_kibana_server: kibana.truongtx.me
+    #   pd_kibana_port: 5601
 
-      # config for neo4j
-      pd_neo4j_server: neo4j.truongtx.me
-      pd_neo4j_port: 7474
+    #   # config for neo4j
+    #   pd_neo4j_server: neo4j.truongtx.me
+    #   pd_neo4j_port: 7474
 
     - role: jekyll-docker
       jd_site_name: jekyll_docker
       jd_server_name: jekyll.truongtx.me
       jd_server_port: 17845
       jd_user: jekyll
+
+    - role: tvgp
+      tvgp_web_server: giapha.truongtx.me
+      tvgp_web_port: 10006
+      tvgp_user: tvgp

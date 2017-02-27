@@ -1,0 +1,10 @@
+# -*- mode: conf -*-
+server {
+       server_name           {{ tvgp_web_server }};
+       listen                80;
+       client_max_body_size  10M;
+
+       location / {
+                proxy_pass http://localhost:{{ tvgp_web_port }};
+       }
+}

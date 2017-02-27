@@ -1,0 +1,38 @@
+---
+- name: create nginx config for tvgp web
+  become: yes
+  template: >-
+    src=tvgp_nginx_site
+    dest=/etc/nginx/sites-available/tvgp
+  notify:
+    - restart nginx
+
+- name: disable default site
+  become: yes
+  file: >-
+    path=/etc/nginx/sites-enabled/default
+    state=absent
+  notify:
+    - restart nginx
+
+- name: enable project site
+  become: yes
+  file: >-
+    dest=/etc/nginx/sites-enabled/tvgp
+    src=/etc/nginx/sites-available/tvgp
+    state=link
+  notify:
+    - restart nginx
+
+- name: create user for project
+  become: yes
+  user: name={{ tvgp_user }} groups=docker append=yes shell=/bin/bash
+
+- name: clone project git repo
+  become: yes
+  become_user: "{{ tvgp_user }}"
+  git: >-
+    repo=https://github.com/tmtxt/tvgp.git
+    dest=/home/{{ tvgp_user }}/tvgp
+    recursive=yes
+    update=no
