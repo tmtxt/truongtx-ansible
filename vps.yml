@@ -36,16 +36,16 @@
   roles:
     - role: ufw
 
-# # projects
-# - hosts: all
-#   roles:
-#     - role: jekyll-docker
-#       jd_site_name: jekyll_docker
-#       jd_server_name: jekyll.truongtx.me
-#       jd_server_port: 17845
-#       jd_user: jekyll
+# projects
+- hosts: all
+  roles:
+    - role: jekyll-docker
+      jd_site_name: jekyll_docker
+      jd_server_name: jekyll.truongtx.me
+      jd_server_port: 17845
+      jd_user: jekyll
 
-#     - role: tvgp
-#       tvgp_web_server: giapha.truongtx.me
-#       tvgp_web_port: 10006
-#       tvgp_user: tvgp
+    - role: aria2-webui
+      aria2_site_name: aria2
+      aria2_server_name: aria2.truongtx.me
+      aria2_server_port: 17846
