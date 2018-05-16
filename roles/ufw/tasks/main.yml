@@ -11,6 +11,10 @@
   become: yes
   ufw: rule=allow port=25565
 
+- name: allow aria2 port
+  become: yes
+  ufw: rule=allow port=6800
+
 - name: deny all incoming connection
   become: yes
   command: ufw default deny incoming
