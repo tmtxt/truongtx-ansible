@@ -1,0 +1,51 @@
+---
+# personal use
+- hosts: vps
+  roles:
+    - role: init
+
+    - role: personal
+      ssh_user: tmtxt
+
+    - role: swapfile
+      become: yes
+      swapfile_size: 4G
+      swapfile_swappiness: 10
+      swapfile_vfs_cache_pressure: 50
+
+# docker
+- hosts: vps
+  roles:
+    - role: docker
+      become: yes
+  tasks:
+    - name: stop docker from messing iptables rules
+      become: yes
+      lineinfile: >-
+        dest=/etc/default/docker
+        line="DOCKER_OPTS=\"--dns 8.8.8.8 --dns 8.8.4.4 --iptables=false\""
+      notify:
+        - restart docker
+  handlers:
+    - name: restart docker
+      become: yes
+      service: name=docker state=restarted
+
+# firewall
+- hosts: all
+  roles:
+    - role: ufw
+
+# # projects
+# - hosts: all
+#   roles:
+#     - role: jekyll-docker
+#       jd_site_name: jekyll_docker
+#       jd_server_name: jekyll.truongtx.me
+#       jd_server_port: 17845
+#       jd_user: jekyll
+
+#     - role: tvgp
+#       tvgp_web_server: giapha.truongtx.me
+#       tvgp_web_port: 10006
+#       tvgp_user: tvgp
