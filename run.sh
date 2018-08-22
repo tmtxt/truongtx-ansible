@@ -17,6 +17,10 @@ function run_playbook {
 
 # specific setup tasks
 
+# mount data volume
+# use when first time vps created or when it is restarted
+run_playbook "setup-volume-mount"
+
 # personal workspace
 # run_playbook "setup-init"
 
@@ -27,4 +31,4 @@ function run_playbook {
 # run_playbook "setup-docker"
 
 # firewall
-run_playbook "setup-firewall"
+# run_playbook "setup-firewall"

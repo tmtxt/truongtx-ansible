@@ -1,0 +1,11 @@
+---
+- name: Format the volume
+  command: mkfs -t ext4 {{ volume_src_path }}
+  when: format_volume
+
+- name: Mount the volume
+  mount:
+    src: "{{ volume_src_path }}"
+    path: "{{ volume_mount_path }}"
+    state: mounted
+    fstype: ext4

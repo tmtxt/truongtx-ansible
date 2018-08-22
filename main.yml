@@ -27,6 +27,16 @@
       changed_when: false
 
   tasks:
+    # mount volume
+    - include_role:
+        name: mount-volume-scaleway
+      vars:
+        volume_mount_path: /mnt/data1
+        volume_src_path: /dev/vdb
+        format_volume: no
+      tags:
+        - setup-volume-mount
+
     - name: Update apt-get
       apt: update_cache=yes cache_valid_time=43200
 
