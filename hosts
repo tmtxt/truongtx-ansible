@@ -1,2 +1,5 @@
-[vps]
-vps.truongtx.me
+sc1-root    ansible_host=sc1.truongtx.me    ansible_user=root
+sc1-tmtxt   ansible_host=sc1.truongtx.me    ansible_user=tmtxt
+
+sc2-root    ansible_host=sc2.truongtx.me    ansible_user=root
+sc2-tmtxt   ansible_host=sc2.truongtx.me    ansible_user=tmtxt

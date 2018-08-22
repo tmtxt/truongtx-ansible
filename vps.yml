@@ -1,17 +1,23 @@
 ---
 # personal use
-- hosts: vps
+- hosts: sc
   roles:
     - role: init
+      tags:
+        - bootstrap
 
     - role: personal
       ssh_user: tmtxt
+      # tags:
+      #   - bootstrap
 
     - role: swapfile
       become: yes
       swapfile_size: 4G
       swapfile_swappiness: 10
       swapfile_vfs_cache_pressure: 50
+      # tags:
+      #   - bootstrap
 
 # docker
 - hosts: vps
