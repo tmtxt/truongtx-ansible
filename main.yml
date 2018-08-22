@@ -22,29 +22,29 @@
           39613236363162313632306261366162353737353836613731313438346439386566
 
   pre_tasks:
-    - name: install python2
+    - name: Install python2
       raw: apt-get -y install python
       changed_when: false
 
   tasks:
-    - name: update apt-get
+    - name: Update apt-get
       apt: update_cache=yes cache_valid_time=43200
 
-    - name: install sudo
+    - name: Install sudo
       apt: name=sudo
 
-    - name: add user tmtxt
+    - name: Add user tmtxt
       user:
         name: tmtxt
         comment: TruongTX
         password: "{{ tmtxt_password_crypted }}"
 
-    - name: add tmtxt to sudoers file
+    - name: Add tmtxt to sudoers file
       lineinfile:
         path: /etc/sudoers
         line: 'tmtxt    ALL=(ALL:ALL) ALL'
 
-    - name: set authorized key for tmtxt user
+    - name: Set authorized key for tmtxt user
       authorized_key:
         user: tmtxt
         state: present
@@ -75,3 +75,7 @@
       swapfile_size: 4G
       swapfile_swappiness: 10
       swapfile_vfs_cache_pressure: 50
+
+    # docker
+    - role: docker
+      become: yes

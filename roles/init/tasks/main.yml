@@ -1,9 +1,9 @@
 ---
-- name: update apt-get
+- name: Update apt-get
   become: yes
   apt: update_cache=yes cache_valid_time=43200
 
-- name: install packages
+- name: Install packages
   become: yes
   apt: name={{ item }}
   with_items:
@@ -16,7 +16,7 @@
     - apt-transport-https
     - python-pip
 
-- name: install python packages
+- name: Install python packages
   become: yes
   pip: name={{ item }}
   with_items:
@@ -26,27 +26,27 @@
     - ansible
     - passlib
 
-- name: clone dotfiles
+- name: Clone dotfiles
   git:
     repo: https://github.com/tmtxt/dotfiles.git
     dest: ~/dotfiles
     accept_hostkey: yes
     recursive: yes
 
-- name: clone oh my zsh
+- name: Clone oh my zsh
   git:
     repo: https://github.com/robbyrussell/oh-my-zsh.git
     dest: ~/.oh-my-zsh
     accept_hostkey: yes
     recursive: yes
 
-- name: symlink .zshrc to home folder
+- name: Symlink .zshrc to home folder
   file:
     src: ~/dotfiles/.zshrc
     dest: ~/.zshrc
     state: link
 
-- name: change user default shell to zsh
+- name: Change user default shell to zsh
   become: yes
   user:
     name: tmtxt
