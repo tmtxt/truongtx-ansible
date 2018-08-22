@@ -66,6 +66,7 @@
           3136
 
   tasks:
+    # personal workspace
     - include_role:
         name: init
       tags:
@@ -87,19 +88,14 @@
       tags:
         - setup-docker
 
-  # roles:
-  #   # personal workspace
-  #   - role: init
-  #     tags:
-  #       - setup-init
-
-  #   # swap
-  #   - role: swapfile
-  #     become: yes
-  #     swapfile_size: 4G
-  #     swapfile_swappiness: 10
-  #     swapfile_vfs_cache_pressure: 50
-
-  #   # docker
-  #   - role: docker
-  #     become: yes
+    # firewall
+    - include_role:
+        name: ufw
+      become: true
+      tags:
+        - setup-firewall
+      # vars:
+      #   allowed_ports:
+      #     - 80                  # http
+      #     - 25565               # minecraft
+      #     - 6800                # aria2

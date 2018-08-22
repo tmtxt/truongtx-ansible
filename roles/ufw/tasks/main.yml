@@ -1,25 +1,19 @@
 ---
-- name: allow ssh connection
-  become: yes
+- name: Always allow ssh connection
   ufw: rule=allow port=ssh
+  notify:
+    - Reload ufw
 
-- name: allow http connection
-  become: yes
-  ufw: rule=allow port=80
+- name: Allow specific ports
+  ufw: rule=allow port={{ item }}
+  with_items: "{{ allowed_ports }}"
+  notify:
+    - Reload ufw
 
-- name: allow minecraft port
-  become: yes
-  ufw: rule=allow port=25565
+- name: Deny all incoming connection
+  ufw: policy=deny direction=incoming
+  notify:
+    - Reload ufw
 
-- name: allow aria2 port
-  become: yes
-  ufw: rule=allow port=6800
-
-- name: deny all incoming connection
-  become: yes
-  command: ufw default deny incoming
-  changed_when: false
-
-- name: enable ufw
-  become: yes
+- name: Enable ufw
   ufw: state=enabled
