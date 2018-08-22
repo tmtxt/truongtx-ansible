@@ -65,29 +65,5 @@
           3330316138393866370a363562326430646430613338646366393363303032643034336132326535
           3136
 
-  tasks:
-    - name: update apt-get
-      become: yes
-      apt: update_cache=yes cache_valid_time=43200
-
-    - name: install packages
-      become: yes
-      apt: name={{ item }}
-      with_items:
-        - zsh
-        - git
-        - nginx
-        - libffi-dev
-        - libssl-dev
-        - ufw
-        - apt-transport-https
-
-    - name: install python packages
-      become: yes
-      pip: name={{ item }}
-      with_items:
-        - pyopenssl
-        - ndg-httpsclient
-        - pyasn1
-        - ansible
-        - passlib
+  roles:
+    - role: init
