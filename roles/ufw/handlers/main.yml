@@ -1,3 +1,4 @@
 ---
 - name: Reload ufw
+  become: true
   ufw: state=reloaded

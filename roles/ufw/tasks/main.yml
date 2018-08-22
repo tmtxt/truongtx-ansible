@@ -10,7 +10,7 @@
   notify:
     - Reload ufw
 
-- name: Deny all incoming connection
+- name: Deny all incoming connection by default
   ufw: policy=deny direction=incoming
   notify:
     - Reload ufw

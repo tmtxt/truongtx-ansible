@@ -94,8 +94,8 @@
       become: true
       tags:
         - setup-firewall
-      # vars:
-      #   allowed_ports:
-      #     - 80                  # http
-      #     - 25565               # minecraft
-      #     - 6800                # aria2
+      vars:
+        allowed_ports:
+          - 80                  # http
+          - 25565               # minecraft
+          - 6800                # aria2
