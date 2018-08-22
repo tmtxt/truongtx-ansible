@@ -1,12 +1,15 @@
 ---
+################################################################################
 # when first created, only able to ssh into that server using root user
 # using root user to create the personal tmtxt user
 - hosts: p1
   gather_facts: no
+  tags:
+    - setup-root
 
   vars:
     ansible_user: root
-    tmtxt_password: !vault |
+    tmtxt_password_crypted: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           64663630336131316638383636643433643466376239323238343832386566396338306433663566
           6234623935643539616439616662326334633734303638630a306265363330366466616564633832
@@ -24,9 +27,67 @@
       changed_when: false
 
   tasks:
+    - name: update apt-get
+      apt: update_cache=yes cache_valid_time=43200
+
+    - name: install sudo
+      apt: name=sudo
+
     - name: add user tmtxt
       user:
         name: tmtxt
         comment: TruongTX
-        groups: sudo
-        password: "{{ tmtxt_password }}"
+        password: "{{ tmtxt_password_crypted }}"
+
+    - name: add tmtxt to sudoers file
+      lineinfile:
+        path: /etc/sudoers
+        line: 'tmtxt    ALL=(ALL:ALL) ALL'
+
+    - name: set authorized key for tmtxt user
+      authorized_key:
+        user: tmtxt
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+################################################################################
+# all other setup tasks need to use tmtxt user, avoid using root user for safety
+- hosts: p1
+  tags:
+    - setup-tmtxt
+  vars:
+    ansible_user: tmtxt
+    ansible_become_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          39663932616436346331666233626133346261633531663533623338326338663163626133616432
+          3262653433393631346337353064363236646438393965310a346530386630343038656166633461
+          32316364306531343635663037376434643334663732353961653066393435373830306461643364
+          3330316138393866370a363562326430646430613338646366393363303032643034336132326535
+          3136
+
+  tasks:
+    - name: update apt-get
+      become: yes
+      apt: update_cache=yes cache_valid_time=43200
+
+    - name: install packages
+      become: yes
+      apt: name={{ item }}
+      with_items:
+        - zsh
+        - git
+        - nginx
+        - libffi-dev
+        - libssl-dev
+        - ufw
+        - apt-transport-https
+
+    - name: install python packages
+      become: yes
+      pip: name={{ item }}
+      with_items:
+        - pyopenssl
+        - ndg-httpsclient
+        - pyasn1
+        - ansible
+        - passlib

@@ -1,4 +1,3 @@
 *.retry
 .vagrant/*
 *.DS_Store
-/password.yml
