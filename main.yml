@@ -65,17 +65,41 @@
           3330316138393866370a363562326430646430613338646366393363303032643034336132326535
           3136
 
-  roles:
-    # personal workspace
-    - role: init
+  tasks:
+    - include_role:
+        name: init
+      tags:
+        - setup-init
 
-    # swap
-    - role: swapfile
+    - include_role:
+        name: swapfile
       become: yes
-      swapfile_size: 4G
-      swapfile_swappiness: 10
-      swapfile_vfs_cache_pressure: 50
+      tags:
+        - setup-swapfile
+      vars:
+        swapfile_size: 4G
+        swapfile_swappiness: 10
+        swapfile_vfs_cache_pressure: 50
 
-    # docker
-    - role: docker
+    - include_role:
+        name: docker
       become: yes
+      tags:
+        - setup-docker
+
+  # roles:
+  #   # personal workspace
+  #   - role: init
+  #     tags:
+  #       - setup-init
+
+  #   # swap
+  #   - role: swapfile
+  #     become: yes
+  #     swapfile_size: 4G
+  #     swapfile_swappiness: 10
+  #     swapfile_vfs_cache_pressure: 50
+
+  #   # docker
+  #   - role: docker
+  #     become: yes

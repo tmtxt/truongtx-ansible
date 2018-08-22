@@ -27,3 +27,13 @@
     repo: "{{ docker_apt_repository }}"
     state: present
     update_cache: yes
+
+- name: Install Docker CE
+  apt: name=docker-ce
+
+- name: Stop docker from messing iptables rules
+  lineinfile: >-
+    dest=/etc/default/docker
+    line="DOCKER_OPTS=\"--dns 8.8.8.8 --dns 8.8.4.4 --iptables=false\""
+  notify:
+    - Restart docker
