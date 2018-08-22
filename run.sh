@@ -24,4 +24,4 @@ function run_playbook {
 # run_playbook "setup-swapfile"
 
 # docker
-run_playbook "docker"
+run_playbook "setup-docker"
