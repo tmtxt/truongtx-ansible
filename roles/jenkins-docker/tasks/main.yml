@@ -11,7 +11,7 @@
     - setup-jenkins
   docker_container:
     name: "{{ jenkins_container_name | default('jenkins') }}"
-    image: jenkins/jenkins:lts
+    image: "{{ jenkins_image }}"
     state: started
     volumes:
       - "{{ jenkins_home_dir }}:/var/jenkins_home"

@@ -127,3 +127,4 @@
         setup_nginx: true
         jenkins_server_name: "jenkins.truongtx.me"
         jenkins_server_port: 15843
+        jenkins_image: tmtxt/jenkins:1.0.0
