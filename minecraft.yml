@@ -14,6 +14,7 @@
     container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('minecraft', true) }}"
     container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
     server_port: "{{ lookup('env', 'SERVER_PORT') | default('25565', true) }}"
+    map_port: "{{ lookup('env', 'MAP_PORT') | default('25566', true) }}"
 
   tasks:
     - name: Create directory for server
@@ -44,6 +45,7 @@
           - "{{ server_dir }}:/minecraft-server"
         published_ports:
           - "{{ server_port }}:25565"
+          - "{{ map_port }}:8123"
         working_dir: "/minecraft-server"
         command: java -Xms4G -Xmx4G -XX:+UseConcMarkSweepGC -jar spigot-{{ minecraft_version }}.jar
         tty: yes

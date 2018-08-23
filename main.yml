@@ -110,6 +110,7 @@
           - 25565               # minecraft
           - 6800                # aria2
           - 25565               # minecraft
+          - 25566               # minecraft
 
     - include_role:
         name: nginx-sites
