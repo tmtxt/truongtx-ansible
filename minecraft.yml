@@ -47,3 +47,4 @@
         working_dir: "/minecraft-server"
         command: java -Xms4G -Xmx4G -XX:+UseConcMarkSweepGC -jar spigot-{{ minecraft_version }}.jar
         tty: yes
+        interactive: yes
