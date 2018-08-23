@@ -9,3 +9,6 @@
     path: "{{ volume_mount_path }}"
     state: mounted
     fstype: ext4
+
+- name: Configure read write access
+  command: chmod a+w {{ volume_mount_path }}

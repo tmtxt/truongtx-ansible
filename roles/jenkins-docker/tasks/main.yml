@@ -1,0 +1,19 @@
+---
+- name: Create home folder for Jenkins
+  become: yes
+  file:
+    path: "{{ jenkins_home_dir }}"
+    state: directory
+    owner: 1000
+
+- name: Start container for Jenkins server
+  tags:
+    - setup-jenkins
+  docker_container:
+    name: "{{ jenkins_container_name | default('jenkins') }}"
+    image: jenkins/jenkins:lts
+    state: started
+    volumes:
+      - "{{ jenkins_home_dir }}:/var/jenkins_home"
+    published_ports:
+      - 15843:8080

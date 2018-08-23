@@ -1,0 +1,29 @@
+---
+- name: Install nginx
+  apt: name=nginx
+
+- name: Disable default site
+  file: >-
+    path=/etc/nginx/sites-enabled/default
+    state=absent
+  notify:
+    - Restart nginx
+
+- name: Create nginx config file
+  template: >-
+    src=nginx-site
+    dest=/etc/nginx/sites-available/{{ item.site_name }}
+  vars:
+    config: "{{ item }}"
+  with_items: "{{ site_config }}"
+  notify:
+    - Restart nginx
+
+- name: Symlink config file
+  file: >-
+    dest=/etc/nginx/sites-enabled/{{ item.site_name }}
+    src=/etc/nginx/sites-available/{{ item.site_name }}
+    state=link
+  with_items: "{{ site_config }}"
+  notify:
+    - Restart nginx

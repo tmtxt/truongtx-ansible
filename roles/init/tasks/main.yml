@@ -25,6 +25,7 @@
     - pyasn1
     - ansible
     - passlib
+    - docker
 
 - name: Clone dotfiles
   git:

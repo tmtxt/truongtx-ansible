@@ -19,7 +19,7 @@ function run_playbook {
 
 # mount data volume
 # use when first time vps created or when it is restarted
-run_playbook "setup-volume-mount"
+# run_playbook "setup-volume-mount"
 
 # personal workspace
 # run_playbook "setup-init"
@@ -32,3 +32,9 @@ run_playbook "setup-volume-mount"
 
 # firewall
 # run_playbook "setup-firewall"
+
+# nginx site
+run_playbook "setup-nginx-sites"
+
+# jenkins
+# run_playbook "setup-jenkins"

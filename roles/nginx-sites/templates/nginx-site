@@ -1,0 +1,11 @@
+# -*- mode: conf -*-
+
+server {
+       server_name           {{ config.server_name }};
+       listen                80;
+       client_max_body_size  10M;
+
+       location / {
+                proxy_pass http://localhost:{{ config.server_port }};
+       }
+}

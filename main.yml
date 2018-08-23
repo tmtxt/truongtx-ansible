@@ -109,3 +109,21 @@
           - 80                  # http
           - 25565               # minecraft
           - 6800                # aria2
+
+    - include_role:
+        name: nginx-sites
+      become: true
+      tags:
+        - setup-nginx-sites
+      vars:
+        site_config: []
+          # - site_name: "jenkins"
+          #   server_name: "jenkins.truongtx.me"
+          #   server_port: 15843
+
+    - include_role:
+        name: jenkins-docker
+      tags:
+        - setup-jenkins
+      vars:
+        jenkins_home_dir: "/mnt/data1/jenkins"
