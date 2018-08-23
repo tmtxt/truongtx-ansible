@@ -1,12 +1,19 @@
 ---
 - hosts: p1
+  gather_facts: no
   vars:
     ansible_user: tmtxt
+
+    minecraft_version: "{{ lookup('env', 'MINECRAFT_VERSION') | default('1.13', true) }}"
+
     # the default server dir path in jenkins
     default_server_dir: "{{ lookup('env', 'DEFAULT_SERVER_DIR') | default('~/tmtxt/mc-server-default', true) }}"
 
     # the dest server dir in the remote host
-    server_dir: "{{ lookup('env', 'MINECRAFT_SERVER_DIR') | default('~/minecraft-server', true) }}"
+    server_dir: "{{ lookup('env', 'SERVER_DIR') | default('~/minecraft-server', true) }}"
+    container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('minecraft', true) }}"
+    container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
+    server_port: "{{ lookup('env', 'SERVER_PORT') | default('25565', true) }}"
 
   tasks:
     - name: Create directory for server
@@ -25,4 +32,17 @@
       with_items:
         - eula.txt
         - server.properties
-        - spigot-1.13.jar
+        - spigot-{{ minecraft_version }}.jar
+
+    - name: Run minecraft server
+      tags: ['run', 'bootstrap']
+      docker_container:
+        name: "{{ container_name }}"
+        image: "openjdk:8-jre"
+        state: "{{ container_state }}"
+        volumes:
+          - "{{ server_dir }}:/minecraft-server"
+        published_ports:
+          - "{{ server_port }}:25565"
+        working_dir: "/minecraft-server"
+        command: java -Xms4G -Xmx4G -XX:+UseConcMarkSweepGC -jar spigot-{{ minecraft_version }}.jar
