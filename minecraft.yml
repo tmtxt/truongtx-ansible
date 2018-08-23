@@ -1,0 +1,28 @@
+---
+- hosts: p1
+  vars:
+    ansible_user: tmtxt
+    # the default server dir path in jenkins
+    default_server_dir: "{{ lookup('env', 'DEFAULT_SERVER_DIR') | default('~/tmtxt/mc-server-default', true) }}"
+
+    # the dest server dir in the remote host
+    server_dir: "{{ lookup('env', 'MINECRAFT_SERVER_DIR') | default('~/minecraft-server', true) }}"
+
+  tasks:
+    - name: Create directory for server
+      tags: ['bootstrap']
+      file:
+        path: "{{ server_dir }}"
+        state: directory
+        mode: 0755
+
+    # Copy server default data
+    - name: Bootstrap default server files
+      tags: ['bootstrap']
+      copy:
+        src: "{{ default_server_dir }}/{{ item }}"
+        dest: "{{ server_dir }}/{{ item }}"
+      with_items:
+        - eula.txt
+        - server.properties
+        - spigot-1.13.jar
