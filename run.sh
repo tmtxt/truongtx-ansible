@@ -34,7 +34,7 @@ function run_playbook {
 # run_playbook "setup-firewall"
 
 # nginx site
-run_playbook "setup-nginx-sites"
+# run_playbook "setup-nginx-sites"
 
 # jenkins
-# run_playbook "setup-jenkins"
+run_playbook "setup-jenkins"

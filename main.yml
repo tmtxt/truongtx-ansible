@@ -117,9 +117,6 @@
         - setup-nginx-sites
       vars:
         site_config: []
-          # - site_name: "jenkins"
-          #   server_name: "jenkins.truongtx.me"
-          #   server_port: 15843
 
     - include_role:
         name: jenkins-docker
@@ -127,3 +124,6 @@
         - setup-jenkins
       vars:
         jenkins_home_dir: "/mnt/data1/jenkins"
+        setup_nginx: true
+        jenkins_server_name: "jenkins.truongtx.me"
+        jenkins_server_port: 15843

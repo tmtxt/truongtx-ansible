@@ -16,4 +16,23 @@
     volumes:
       - "{{ jenkins_home_dir }}:/var/jenkins_home"
     published_ports:
-      - 15843:8080
+      - "{{ jenkins_server_port }}:8080"
+
+- name: Create nginx config file
+  become: true
+  when: setup_nginx
+  template: >-
+    src=nginx-site
+    dest=/etc/nginx/sites-available/{{ jenkins_site_name }}
+  notify:
+    - Restart nginx
+
+- name: Symlink config file
+  become: true
+  when: setup_nginx
+  file: >-
+    dest=/etc/nginx/sites-enabled/{{ jenkins_site_name }}
+    src=/etc/nginx/sites-available/{{ jenkins_site_name }}
+    state=link
+  notify:
+    - Restart nginx

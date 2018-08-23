@@ -1,0 +1,3 @@
+---
+setup_nginx: false
+jenkins_site_name: jenkins
