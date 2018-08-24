@@ -74,6 +74,7 @@
           32316364306531343635663037376434643334663732353961653066393435373830306461643364
           3330316138393866370a363562326430646430613338646366393363303032643034336132326535
           3136
+    jekyll_password: "{{ ansible_become_pass }}"
 
   tasks:
     # personal workspace
@@ -122,6 +123,9 @@
           - site_name: jekyll
             server_name: jekyll.truongtx.me
             server_port: 28954
+            basic_auth: true
+            basic_auth_user: jekyll
+            basic_auth_password: "{{ jekyll_password }}"
 
     - include_role:
         name: jenkins-docker

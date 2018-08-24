@@ -9,6 +9,16 @@
   notify:
     - Restart nginx
 
+- name: Generate password protection for site if enabled
+  htpasswd:
+    path: "/etc/nginx/.htpasswd-{{ item.site_name }}"
+    name: "{{ item.basic_auth_user }}"
+    password: "{{ item.basic_auth_password }}"
+  when: item.basic_auth is defined and item.basic_auth
+  with_items: "{{ site_config }}"
+  notify:
+    - Restart nginx
+
 - name: Create nginx config file
   template: >-
     src=nginx-site
