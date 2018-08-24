@@ -2,6 +2,7 @@
 # setting up and running a new minecraft server
 - hosts: p1
   gather_facts: no
+  tags: ['setup']
   vars:
     ansible_user: tmtxt
 
@@ -24,7 +25,7 @@
 
   tasks:
     - name: Create directory for server
-      tags: ['bootstrap', 'setup']
+      tags: ['bootstrap']
       file:
         path: "{{ server_dir }}"
         state: directory
@@ -32,13 +33,13 @@
 
     # Copy server default data
     - name: Copy default server files
-      tags: ['bootstrap', 'setup']
+      tags: ['bootstrap']
       synchronize:
         src: "{{ default_server_dir }}/{{ minecraft_version }}/"
         dest: "{{ server_dir }}/"
 
     - name: Run minecraft server
-      tags: ['run', 'setup']
+      tags: ['run']
       docker_container:
         name: "{{ container_name }}"
         image: "openjdk:8-jre"
@@ -54,6 +55,8 @@
         interactive: yes
 
 # Tasks for backing server data, make sure to turn off the server first
+# Default to only create backup file, log the backup dir and leave it there
+# Optionally you can set the env var to push to google drive or clean up the backup file after done
 - hosts: p1
   gather_facts: no
   tags: ['backup']
@@ -66,6 +69,10 @@
     remove_backup_file: "{{ lookup('env', 'REMOVE_BACKUP_FILE') | default('false', true) }}"
 
     # variables for using rclone to push to google drive
+    push_to_gdrive: "{{ lookup('env', 'PUSH_TO_GDRIVE') | default('false', true) }}"
+    # if push_to_gdrive is true, you are required to set these variables
+    rclone_config_dir: "{{ lookup('env', 'RCLONE_CONFIG_DIR') | default('~/.config/rclone', true) }}"
+    gdrive_directory: "{{ lookup('env', 'GDRIVE_DIRECTORY') | default('minecraft-server', true) }}"
 
   tasks:
     - name: Create temp dir for backup file
@@ -73,19 +80,36 @@
         state: directory
       register: temp_dir
 
-    - debug: msg={{ temp_dir.path }}
+    - name: Generate backup file name
+      command: date +%FT%R
+      register: file_name_res
+
+    - debug:
+        msg: "Backup dir: {{ temp_dir.path }}"
+
+    - debug:
+        msg: "Backup file: minecraft-{{ file_name_res.stdout }}.zip"
 
     - name: Backup server data
       tags: ['backup']
       shell: >-
         zip -r -0 \
         --exclude='*plugins/dynmap/*' \
-        minecraft-$(date +%FT%R).zip \
+        minecraft-{{ file_name_res.stdout }}.zip \
         {{ server_dir }}
       args:
         chdir: "{{ temp_dir.path }}"
       ignore_errors: yes
       register: zip_res
+
+    - name: Push to Google Drive
+      shell: >-
+        docker run --rm \
+        -v {{ rclone_config_dir }}:/root/.config/rclone \
+        -v {{ temp_dir.path }}:/data \
+        tmtxt/rclone:1.42 \
+        rclone copy ./minecraft-{{ file_name_res.stdout }}.zip gdrive:/{{ gdrive_directory }}
+      when: push_to_gdrive == "true"
 
     - name: Cleanup temp dir
       file:
