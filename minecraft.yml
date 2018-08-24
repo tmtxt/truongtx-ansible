@@ -31,8 +31,8 @@
     - name: Copy default server files
       tags: ['bootstrap', 'setup']
       synchronize:
-        src: "{{ default_server_dir }}/{{ minecraft_version }}"
-        dest: "{{ server_dir }}"
+        src: "{{ default_server_dir }}/{{ minecraft_version }}/"
+        dest: "{{ server_dir }}/"
 
     - name: Run minecraft server
       tags: ['run', 'setup']
