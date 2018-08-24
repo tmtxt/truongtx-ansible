@@ -31,10 +31,10 @@ function run_playbook {
 # run_playbook "setup-docker"
 
 # firewall
-run_playbook "setup-firewall"
+# run_playbook "setup-firewall"
 
 # nginx site
 # run_playbook "setup-nginx-sites"
 
 # jenkins
-# run_playbook "setup-jenkins"
+run_playbook "setup-jenkins"

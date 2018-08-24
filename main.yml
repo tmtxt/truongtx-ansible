@@ -125,7 +125,8 @@
         - setup-jenkins
       vars:
         jenkins_home_dir: "/mnt/data1/jenkins"
-        setup_nginx: true
+        setup_nginx: false      # change this to true for first setup, otherwise, leave it as false
+                                # for fast
         jenkins_server_name: "jenkins.truongtx.me"
         jenkins_server_port: 15843
-        jenkins_image: tmtxt/jenkins:1.0.0
+        jenkins_image: tmtxt/jenkins:1.1.0
