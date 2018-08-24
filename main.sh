@@ -9,6 +9,10 @@ function run_playbook {
     fi
 }
 
+if [[ -n "$1" ]]; then
+    run_playbook $1
+fi
+
 # setup everything using this command, used when first created the VPS to setup everything
 # run_playbook
 
@@ -37,4 +41,4 @@ function run_playbook {
 # run_playbook "setup-nginx-sites"
 
 # jenkins
-run_playbook "setup-jenkins"
+# run_playbook "setup-jenkins"

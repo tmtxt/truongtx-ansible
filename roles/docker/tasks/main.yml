@@ -31,10 +31,17 @@
 - name: Install Docker CE
   apt: name=docker-ce
 
-- name: Stop docker from messing iptables rules
+- name: Stop docker from messing iptables rules in upstart
   lineinfile: >-
     dest=/etc/default/docker
     line="DOCKER_OPTS=\"--dns 8.8.8.8 --dns 8.8.4.4 --iptables=false\""
+  notify:
+    - Restart docker
+
+- name: Stop docker from messing iptables rules in systemd
+  template:
+    src: "daemon.json"
+    dest: "/etc/docker/daemon.json"
   notify:
     - Restart docker
 
