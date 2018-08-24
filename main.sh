@@ -22,7 +22,7 @@ function run_playbook {
 # run_playbook "setup-volume-mount"
 
 # personal workspace
-# run_playbook "setup-init"
+run_playbook "setup-init"
 
 # swapfile
 # run_playbook "setup-swapfile"
@@ -37,4 +37,4 @@ function run_playbook {
 # run_playbook "setup-nginx-sites"
 
 # jenkins
-run_playbook "setup-jenkins"
+# run_playbook "setup-jenkins"
