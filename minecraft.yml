@@ -60,7 +60,12 @@
 
   vars:
     ansible_user: tmtxt
+
     server_dir: "{{ lookup('env', 'SERVER_DIR') | default('~/minecraft-server', true) }}"
+    # whether to remove backup file after done
+    remove_backup_file: "{{ lookup('env', 'REMOVE_BACKUP_FILE') | default('false', true) }}"
+
+    # variables for using rclone to push to google drive
 
   tasks:
     - name: Create temp dir for backup file
@@ -86,6 +91,7 @@
       file:
         path: "{{ temp_dir.path }}"
         state: absent
+      when: remove_backup_file == "true"
 
     - name: Check zip result
       fail: msg="Fail to create zip file"
