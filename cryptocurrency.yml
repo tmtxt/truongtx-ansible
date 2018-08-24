@@ -1,6 +1,7 @@
 ---
 # setup and run crypto currency bot in docker
 - hosts: p1
+  gather_facts: no
   vars:
     ansible_user: tmtxt
 
