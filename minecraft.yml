@@ -1,4 +1,5 @@
 ---
+# setting up and running a new minecraft server
 - hosts: p1
   gather_facts: no
   vars:
@@ -18,6 +19,8 @@
     container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
     server_port: "{{ lookup('env', 'SERVER_PORT') | default('25565', true) }}"
     map_port: "{{ lookup('env', 'MAP_PORT') | default('25566', true) }}"
+
+    # variables used for backup
 
   tasks:
     - name: Create directory for server
@@ -49,3 +52,30 @@
         command: java -Xms4G -Xmx4G -XX:+UseConcMarkSweepGC -jar spigot-{{ minecraft_version }}.jar
         tty: yes
         interactive: yes
+
+# Tasks for backing server data, make sure to turn off the server first
+- hosts: p1
+  gather_facts: no
+  tags: ['backup']
+
+  vars:
+    ansible_user: tmtxt
+    server_dir: "{{ lookup('env', 'SERVER_DIR') | default('~/minecraft-server', true) }}"
+
+  tasks:
+    - name: Create temp dir for backup file
+      tempfile:
+        state: directory
+      register: temp_dir
+
+    - debug: msg={{ temp_dir.path }}
+
+    - name: Backup server data
+      tags: ['backup']
+      shell: >-
+        zip -r -0 \
+        --exclude='*plugins/dynmap/*' \
+        minecraft-$(date +%FT%R).zip \
+        {{ server_dir }}
+      args:
+        chdir: "{{ temp_dir.path }}"
