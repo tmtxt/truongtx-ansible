@@ -4,11 +4,14 @@
   vars:
     ansible_user: tmtxt
 
+    # common variables
     minecraft_version: "{{ lookup('env', 'MINECRAFT_VERSION') | default('1.13', true) }}"
 
+    # variables for locating files in host server
     # the default server dir path in jenkins
     default_server_dir: "{{ lookup('env', 'DEFAULT_SERVER_DIR') | default('~/tmtxt/mc-server-default', true) }}"
 
+    # variables for locating files on remote server
     # the dest server dir in the remote host
     server_dir: "{{ lookup('env', 'SERVER_DIR') | default('~/minecraft-server', true) }}"
     container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('minecraft', true) }}"
@@ -18,25 +21,21 @@
 
   tasks:
     - name: Create directory for server
-      tags: ['bootstrap']
+      tags: ['bootstrap', 'setup']
       file:
         path: "{{ server_dir }}"
         state: directory
         mode: 0755
 
     # Copy server default data
-    - name: Bootstrap default server files
-      tags: ['bootstrap']
+    - name: Copy default server files
+      tags: ['bootstrap', 'setup']
       copy:
-        src: "{{ default_server_dir }}/{{ item }}"
-        dest: "{{ server_dir }}/{{ item }}"
-      with_items:
-        - eula.txt
-        - server.properties
-        - spigot-{{ minecraft_version }}.jar
+        src: "{{ default_server_dir }}/{{ minecraft_version }}"
+        dest: "{{ server_dir }}"
 
     - name: Run minecraft server
-      tags: ['run', 'bootstrap']
+      tags: ['run', 'setup']
       docker_container:
         name: "{{ container_name }}"
         image: "openjdk:8-jre"
