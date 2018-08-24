@@ -1,0 +1,18 @@
+---
+# setup and run crypto currency bot in docker
+- hosts: p1
+  vars:
+    ansible_user: tmtxt
+
+    bot_token: "{{ lookup('env', 'BOT_TOKEN') }}"
+    container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('crypto-currency', true) }}"
+
+  tasks:
+    - name: Start/Restart docker container for crypto currency
+      docker_container:
+        name: "{{ container_name }}"
+        image: "tmtxt/discord-crypto-currency:1.0.1"
+        state: "started"
+        restart: yes
+        env:
+          TOKEN: "{{ bot_token }}"
