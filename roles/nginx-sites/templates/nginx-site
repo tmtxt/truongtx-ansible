@@ -7,5 +7,10 @@ server {
 
        location / {
                 proxy_pass http://localhost:{{ config.server_port }};
+
+                {% if config.basic_auth is defined and config.basic_auth %}
+                auth_basic "Restricted Content";
+                auth_basic_user_file /etc/nginx/.htpasswd-{{ config.site_name }};
+                {% endif %}
        }
 }
