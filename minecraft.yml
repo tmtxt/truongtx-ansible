@@ -79,3 +79,14 @@
         {{ server_dir }}
       args:
         chdir: "{{ temp_dir.path }}"
+      ignore_errors: yes
+      register: zip_res
+
+    - name: Cleanup temp dir
+      file:
+        path: "{{ temp_dir.path }}"
+        state: absent
+
+    - name: Check zip result
+      fail: msg="Fail to create zip file"
+      when: zip_res.failed
