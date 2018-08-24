@@ -30,7 +30,7 @@
     # Copy server default data
     - name: Copy default server files
       tags: ['bootstrap', 'setup']
-      copy:
+      synchronize:
         src: "{{ default_server_dir }}/{{ minecraft_version }}"
         dest: "{{ server_dir }}"
 
