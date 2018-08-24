@@ -35,6 +35,6 @@
           - "{{ server_dir }}/blog:/srv/jekyll"
         published_ports:
           - "{{ server_port }}:4000"
-        command: "jekyll serve"
+        command: "jekyll serve -D"
         env:
           JEKYLL_UID: "{{ user_id_res.stdout }}"
