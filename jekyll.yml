@@ -1,0 +1,40 @@
+---
+# setup jekyll server in docker for truongtx blog
+- hosts: p1
+  vars:
+    ansible_user: tmtxt
+
+    server_dir: "{{ lookup('env', 'SERVER_DIR') | default('/home/tmtxt/jekyll', true) }}"
+    container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('jekyll', true) }}"
+    jekyll_version: "{{ lookup('env', 'JEKYLL_VERSION') | default('3.8.3', true) }}"
+    server_port: "{{ lookup('env', 'SERVER_PORT') | default('28954', true) }}"
+
+  tasks:
+    - name: Create directory for server
+      file:
+        path: "{{ server_dir }}"
+        state: directory
+        mode: 0755
+
+    - name: Clone blog repo
+      git:
+        repo: https://github.com/tmtxt/tmtxt.github.com.git
+        dest: "{{ server_dir }}/blog"
+
+    - name: Get current user uid
+      command: id -u
+      register: user_id_res
+
+    - name: Start/Restart docker container for jekyll blog
+      docker_container:
+        name: "{{ container_name }}"
+        image: "jekyll/jekyll:{{ jekyll_version }}"
+        state: "started"
+        restart: yes
+        volumes:
+          - "{{ server_dir }}/blog:/srv/jekyll"
+        published_ports:
+          - "{{ server_port }}:4000"
+        command: "jekyll serve"
+        env:
+          JEKYLL_UID: "{{ user_id_res.stdout }}"
