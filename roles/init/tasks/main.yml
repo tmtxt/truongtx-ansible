@@ -16,6 +16,7 @@
     - apt-transport-https
     - python-pip
     - zip
+    - pass
 
 - name: Install python packages
   become: yes

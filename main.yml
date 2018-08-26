@@ -75,6 +75,13 @@
           3330316138393866370a363562326430646430613338646366393363303032643034336132326535
           3136
     jekyll_password: "{{ ansible_become_pass }}"
+    minecraft_map_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          30313263653939366633363565613565373431333230313664323633333630656335363963636164
+          6165613736316333383239623134343562653133663061380a663865343039353130663161616538
+          37633236633734323865313562643261333836343263336562306233393266643533376138346336
+          6435303438356332320a316362643836313763363739316664356436663737376139343634636235
+          3132
 
   tasks:
     # personal workspace
@@ -110,7 +117,6 @@
           - 80                  # http
           - 25565               # minecraft
           - 6800                # aria2
-          - 25566               # minecraft
 
     - include_role:
         name: nginx-sites
@@ -126,6 +132,13 @@
             basic_auth: true
             basic_auth_user: jekyll
             basic_auth_password: "{{ jekyll_password }}"
+
+          - site_name: minecraft
+            server_name: mc2.truongtx.me
+            server_port: 25566
+            basic_auth: true
+            basic_auth_user: mineclgt
+            basic_auth_password: "{{ minecraft_map_password }}"
 
     - include_role:
         name: jenkins-docker
