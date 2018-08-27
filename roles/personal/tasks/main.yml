@@ -1,33 +1,9 @@
 ---
-- name: Update apt-get
-  become: yes
-  apt: update_cache=yes cache_valid_time=43200
-
 - name: Install apt packages
   become: yes
   apt: name={{ item }}
   with_items:
     - zsh
-    - git
-    - nginx
-    - libffi-dev
-    - libssl-dev
-    - ufw
-    - apt-transport-https
-    - python-pip
-    - zip
-    - pass
-
-- name: Install python packages
-  become: yes
-  pip: name={{ item }}
-  with_items:
-    - pyopenssl
-    - ndg-httpsclient
-    - pyasn1
-    - ansible
-    - passlib
-    - docker
 
 - name: Clone dotfiles
   git:

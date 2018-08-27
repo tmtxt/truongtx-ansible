@@ -1,0 +1,5 @@
+---
+- hosts: prod.rdb
+  tasks:
+    - include_role:
+        name: personal
