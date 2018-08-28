@@ -42,6 +42,8 @@
         zip -r -0 \
         jenkins-{{ file_name_res.stdout }}.zip \
         {{ jenkins_home_dir }}
+      args:
+        chdir: "{{ temp_dir.path }}"
 
     - include_role:
         name: jenkins-docker
