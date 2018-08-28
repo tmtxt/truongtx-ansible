@@ -142,11 +142,11 @@
             basic_auth_user: mineclgt
             basic_auth_password: "{{ minecraft_map_password }}"
 
-          - site_name: aria2
-            server_name: aria2.truongtx.me
+          - site_name: aria
+            server_name: aria.truongtx.me
             server_port: 25598
             basic_auth: true
-            basic_auth_user: aria2
+            basic_auth_user: aria
             basic_auth_password: "{{ aria2_password }}"
 
     - include_role:
