@@ -2,3 +2,4 @@
 setup_nginx: false
 jenkins_site_name: jenkins
 jenkins_image: jenkins/jenkins:lts
+jenkins_container_state: started

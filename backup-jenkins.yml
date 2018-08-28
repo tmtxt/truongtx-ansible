@@ -1,0 +1,50 @@
+---
+# just create the backup file
+- hosts: p1
+  vars:
+    ansible_user: tmtxt
+    ansible_become_pass: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          39663932616436346331666233626133346261633531663533623338326338663163626133616432
+          3262653433393631346337353064363236646438393965310a346530386630343038656166633461
+          32316364306531343635663037376434643334663732353961653066393435373830306461643364
+          3330316138393866370a363562326430646430613338646366393363303032643034336132326535
+          3136
+    jenkins_home_dir: "/mnt/data1/jenkins"
+    jenkins_server_port: 15843
+    jenkins_image: tmtxt/jenkins:1.1.0
+
+  tasks:
+    - include_role:
+        name: jenkins-docker
+      vars:
+        setup_nginx: false
+        jenkins_container_state: stopped
+
+    - name: Create temp dir for backup file
+      tempfile:
+        state: directory
+      register: temp_dir
+
+    - name: Generate backup file name
+      command: date +%FT%R
+      register: file_name_res
+
+    - debug:
+        msg: "Backup dir: {{ temp_dir.path }}"
+
+    - debug:
+        msg: "Backup file: jenkins-{{ file_name_res.stdout }}.zip"
+
+    - name: Zip Jenkins home
+      become: yes
+      shell: >-
+        zip -r -0 \
+        jenkins-{{ file_name_res.stdout }}.zip \
+        {{ jenkins_home_dir }}
+
+    - include_role:
+        name: jenkins-docker
+      vars:
+        setup_nginx: false
+        jenkins_container_state: started

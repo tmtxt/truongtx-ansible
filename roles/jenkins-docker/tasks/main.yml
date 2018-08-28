@@ -7,12 +7,10 @@
     owner: 1000
 
 - name: Start container for Jenkins server
-  tags:
-    - setup-jenkins
   docker_container:
     name: "{{ jenkins_container_name | default('jenkins') }}"
     image: "{{ jenkins_image }}"
-    state: started
+    state: "{{ jenkins_container_state }}"
     volumes:
       - "{{ jenkins_home_dir }}:/var/jenkins_home"
     published_ports:
