@@ -75,6 +75,7 @@
           3330316138393866370a363562326430646430613338646366393363303032643034336132326535
           3136
     jekyll_password: "{{ ansible_become_pass }}"
+    aria2_password: "{{ ansible_become_pass }}"
     minecraft_map_password: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           30313263653939366633363565613565373431333230313664323633333630656335363963636164
@@ -117,6 +118,7 @@
           - 80                  # http
           - 25565               # minecraft
           - 6800                # aria2
+          - 25598               # aria2 webui
 
     - include_role:
         name: nginx-sites
@@ -139,6 +141,13 @@
             basic_auth: true
             basic_auth_user: mineclgt
             basic_auth_password: "{{ minecraft_map_password }}"
+
+          - site_name: aria2
+            server_name: aria2.truongtx.me
+            server_port: 25598
+            basic_auth: true
+            basic_auth_user: aria2
+            basic_auth_password: "{{ aria2_password }}"
 
     - include_role:
         name: jenkins-docker

@@ -1,0 +1,47 @@
+---
+- hosts: "{{ host }}"
+  gather_facts: no
+
+  vars:
+    docker_image: "{{ lookup('env', 'DOCKER_IMAGE') | default('tmtxt/aria2-rclone:1.0.0', true) }}"
+    container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('aria2', true) }}"
+    container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
+
+    webui_port: "{{ lookup('env', 'WEBUI_PORT') | default('8080', true) }}"
+    rpc_port: "{{ lookup('env', 'RPC_PORT') | default('6800', true) }}"
+
+    data_dir: "{{ lookup('env', 'DATA_DIR') | default('/home/user/aria2', true) }}"
+    rclone_dir: "{{ lookup('env', 'RCLONE_DIR') | default('/home/user/.config/rclone', true) }}"
+
+    rpc_password: "{{ lookup('env', 'RPC_PASSWORD') | default('test', true) }}"
+    rclone_enabled: "{{ lookup('env', 'RCLONE_ENABLED') | default('false', true) }}"
+    rclone_remote_name: "{{ lookup('env', 'RCLONE_REMOTE_NAME') | default('gdrive', true) }}"
+    rclone_remote_dir: "{{ lookup('env', 'RCLONE_REMOTE_DIR') | default('Aria2-Download', true) }}"
+
+  tasks:
+    - name: Ensure data dir exists
+      file:
+        path: "{{ data_dir }}"
+        state: directory
+
+    - name: Ensure rclone dir exists
+      file:
+        path: "{{ rclone_dir }}"
+        state: directory
+
+    - name: Run docker container for aria2
+      docker_container:
+        image: "{{ docker_image }}"
+        name: "{{ container_name }}"
+        state: "{{ container_state }}"
+        volumes:
+          - "{{ data_dir }}:/data"
+          - "{{ rclone_dir }}:/root/.config/rclone"
+        published_ports:
+          - "{{ webui_port }}:8080"
+          - "{{ rpc_port }}:6800"
+        env:
+          PASSWORD: "{{ rpc_password }}"
+          RCLONE_ENABLED: "{{ rclone_enabled }}"
+          RCLONE_REMOTE_NAME: "{{ rclone_remote_name }}"
+          RCLONE_REMOTE_DIR: "{{ rclone_remote_dir }}"
