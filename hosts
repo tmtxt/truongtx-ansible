@@ -2,4 +2,4 @@ p1 ansible_host=p1.truongtx.me ansible_user=tmtxt
 
 localhost ansible_connection=local
 
-kagi ip_address=51.15.240.48
+kagi ansible_host=51.15.240.48 ansible_user=kagi
