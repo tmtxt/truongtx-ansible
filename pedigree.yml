@@ -37,3 +37,5 @@
       command: docker-compose build
       environment:
         WEB_PORT: "{{ lookup('env', 'WEB_PORT') }}"
+      args:
+        chdir: "{{ app_dir }}"
