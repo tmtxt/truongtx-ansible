@@ -1,0 +1,18 @@
+---
+- hosts: p1
+  vars:
+    ansible_user: tmtxt
+
+    project_dir: "{{ lookup('env', 'PROJECT_DIR') | default('/mnt/data1/giapha', true) }}"
+    app_dir: "{{ project_dir }}/app"
+    data_dir: "{{ project_dir }}/data"
+
+  tasks:
+    - name: Create directories for the project
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: 0755
+      with_items:
+        - "{{ app_dir }}"
+        - "{{ data_dir }}"
