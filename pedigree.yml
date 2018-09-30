@@ -3,6 +3,8 @@
   vars:
     ansible_user: tmtxt
 
+    repo_ssh_key_file: "{{ lookup('env', 'REPO_SSH_KEY_FILE') | default('/home/tmtxt/.ssh/id_rsa.jenkins.giapha', true) }}"
+
     project_dir: "{{ lookup('env', 'PROJECT_DIR') | default('/mnt/data1/giapha', true) }}"
     app_dir: "{{ project_dir }}/app"
     data_dir: "{{ project_dir }}/data"
@@ -16,3 +18,10 @@
       with_items:
         - "{{ app_dir }}"
         - "{{ data_dir }}"
+
+    - name: Clone the app
+      git:
+        repo: git@gitlab.com:tmtxt/genealogy.git
+        dest: "{{ app_dir }}"
+        accept_hostkey: yes
+        key_file: "{{ repo_ssh_key_file }}"
