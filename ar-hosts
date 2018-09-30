@@ -1,1 +1,2 @@
-prod.rdb ip_address=10.240.1.50 ansible_ssh_user=me
+prod.rethinkdb            ip_address=10.240.1.50  ansible_ssh_user=me
+prod.rethinkdb-backup     ip_address=10.240.1.18  ansible_ssh_user=me

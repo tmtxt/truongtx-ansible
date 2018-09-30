@@ -1,5 +1,5 @@
 ---
-- hosts: prod.rdb
+- hosts: "{{ host }}"
   tasks:
     - include_role:
         name: personal
