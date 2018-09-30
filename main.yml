@@ -83,6 +83,13 @@
           37613435353161353465646131326136623933646434633936616565366430366136666462666363
           3633623034366239650a373865373835663733666437613064363435653561313566333535343237
           3966
+    giapha_web_password: !vault |
+          $ANSIBLE_VAULT;1.1;AES256
+          32333038323835626662333861323034393664303662383165326366346632653166366539363363
+          3231343265653364383562626234653866356236323662310a653830626663633364623262616638
+          31326238336535346666336439616339383437373435646233336538373537613339323266373261
+          3466336461623539340a633736326230643138663031656332376638303962303661336235616534
+          33333035643861363531363439386636623633306138303030656535343139333061
 
   tasks:
     # personal workspace
@@ -149,12 +156,12 @@
             basic_auth_user: aria2
             basic_auth_password: "{{ aria2_password }}"
 
-          - site_name: aria
-            server_name: aria.truongtx.me
-            server_port: 25598
+          - site_name: giapha
+            server_name: giapha.truongtx.me
+            server_port: 47364
             basic_auth: true
-            basic_auth_user: aria
-            basic_auth_password: "{{ aria2_password }}"
+            basic_auth_user: giapha
+            basic_auth_password: "{{ giapha_web_password }}"
 
     - include_role:
         name: jenkins-docker
