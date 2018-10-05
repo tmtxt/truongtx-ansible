@@ -1,2 +1,3 @@
 prod.rethinkdb            ip_address=10.240.1.50  ansible_ssh_user=me
 prod.rethinkdb-backup     ip_address=10.240.1.18  ansible_ssh_user=me
+jenkins              ip_address=10.240.0.8   ansible_ssh_user=me
