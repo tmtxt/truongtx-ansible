@@ -8,6 +8,7 @@
     app_version: "{{ lookup('env', 'APP_VERSION') | default('latest', true) }}" # the docker image version
     container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('genealogy', true) }}"
     container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
+    server_port: "{{ lookup('env', 'SERVER_PORT') | default('47364', true) }}"
 
   tasks:
     - name: Create directories for the project
