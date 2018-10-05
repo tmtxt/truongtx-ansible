@@ -1,0 +1,29 @@
+---
+# setup genealogy website
+- hosts: p1
+  vars:
+    ansible_user: tmtxt
+    app_dir: "{{ lookup('env', 'APP_DIR') | default('/mnt/data1/genealogy', true) }}"
+
+    app_version: "{{ lookup('env', 'APP_VERSION') | default('latest', true) }}" # the docker image version
+    container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('genealogy', true) }}"
+    container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
+
+  tasks:
+    - name: Create directories for the project
+      tags:
+        - setup
+      file:
+        path: "{{ app_dir }}"
+        state: directory
+        mode: 0755
+
+    - name: Start docker container
+      tags:
+        - run
+      docker_container:
+        name: "{{ container_name }}"
+        image: "tmtxt/genealogy:{{ app_version }}"
+        state: "{{ container_state }}"
+        published_ports:
+          - "{{ server_port }}:80"
