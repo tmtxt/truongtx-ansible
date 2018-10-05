@@ -28,3 +28,4 @@
         state: "{{ container_state }}"
         published_ports:
           - "{{ server_port }}:80"
+        pull: True
