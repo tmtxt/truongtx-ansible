@@ -16,6 +16,9 @@
     app_container_name: "{{ lookup('env', 'APP_CONTAINER_NAME') | default('genealogy', true) }}"
     server_port: "{{ lookup('env', 'SERVER_PORT') | default('47364', true) }}" # server exposed port
 
+    # app env
+    ensure_data_enabled: "{{ lookup('env', 'ENSURE_DATA_ENABLED') | default('false', true) }}"
+
   tasks:
     - name: Create directories for the project
       tags:
@@ -48,7 +51,7 @@
         links:
           - "{{ neo4j_container_name }}:neo4j"
         env:
-          # ENSURE_DATA_ENABLED: "true"
+          ENSURE_DATA_ENABLED: "{{ ensure_data_enabled }}"
           NEO4J_SERVER: neo4j
           NEO4J_PORT: 7687
           NEO4J_USER: neo4j
