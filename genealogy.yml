@@ -1,14 +1,20 @@
 ---
 # setup genealogy website
 - hosts: p1
+  gather_facts: no
   vars:
     ansible_user: tmtxt
     app_dir: "{{ lookup('env', 'APP_DIR') | default('/mnt/data1/genealogy', true) }}"
-
-    app_version: "{{ lookup('env', 'APP_VERSION') | default('latest', true) }}" # the docker image version
-    container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('genealogy', true) }}"
     container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
-    server_port: "{{ lookup('env', 'SERVER_PORT') | default('47364', true) }}"
+
+    # neo4j container
+    neo4j_version: "{{ lookup('env', 'NEO4J_VERSION') | default('3.4.7', true) }}"
+    neo4j_container_name: "{{ lookup('env', 'NEO4J_CONTAINER_NAME') | default('genealogy-neo4j', true) }}"
+
+    # app container
+    app_version: "{{ lookup('env', 'APP_VERSION') | default('latest', true) }}" # the docker image version
+    app_container_name: "{{ lookup('env', 'APP_CONTAINER_NAME') | default('genealogy', true) }}"
+    server_port: "{{ lookup('env', 'SERVER_PORT') | default('47364', true) }}" # server exposed port
 
   tasks:
     - name: Create directories for the project
@@ -19,13 +25,30 @@
         state: directory
         mode: 0755
 
-    - name: Start docker container
+    - name: Start Neo4j docker container
       tags:
         - run
       docker_container:
-        name: "{{ container_name }}"
+        name: "{{ neo4j_container_name }}"
+        image: "neo4j:{{ neo4j_version }}"
+        state: "{{ container_state }}"
+        env:
+          NEO4J_AUTH: "none"
+
+    - name: Start app docker container
+      tags:
+        - run
+      docker_container:
+        name: "{{ app_container_name }}"
         image: "tmtxt/genealogy:{{ app_version }}"
         state: "{{ container_state }}"
         published_ports:
           - "{{ server_port }}:80"
         pull: True
+        links:
+          - "{{ neo4j_container_name }}:neo4j"
+        env:
+          # ENSURE_DATA_ENABLED: "true"
+          NEO4J_SERVER: neo4j
+          NEO4J_PORT: 7687
+          NEO4J_USER: neo4j
