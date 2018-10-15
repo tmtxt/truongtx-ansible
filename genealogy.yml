@@ -5,6 +5,7 @@
   vars:
     ansible_user: tmtxt
     app_dir: "{{ lookup('env', 'APP_DIR') | default('/mnt/data1/genealogy', true) }}"
+    neo4j_dir: "{{ app_dir }}/neo4j"
     container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
 
     # neo4j container
@@ -35,6 +36,8 @@
         name: "{{ neo4j_container_name }}"
         image: "neo4j:{{ neo4j_version }}"
         state: "{{ container_state }}"
+        volumes:
+          - "{{ neo4j_dir }}:/data"
         env:
           NEO4J_AUTH: "none"
 
