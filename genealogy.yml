@@ -6,11 +6,16 @@
     ansible_user: tmtxt
     app_dir: "{{ lookup('env', 'APP_DIR') | default('/mnt/data1/genealogy', true) }}"
     neo4j_dir: "{{ app_dir }}/neo4j"
+    rethinkdb_dir: "{{ app_dir }}/rethinkdb"
     container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
 
     # neo4j container
     neo4j_version: "{{ lookup('env', 'NEO4J_VERSION') | default('3.4.7', true) }}"
     neo4j_container_name: "{{ lookup('env', 'NEO4J_CONTAINER_NAME') | default('genealogy-neo4j', true) }}"
+
+    # rethinkdb container
+    rethinkdb_container_name: "{{ lookup('env', 'RETHINKDB_CONTAINER_NAME') | default('genealogy-rethinkdb', true) }}"
+    rethinkdb_version: "{{ lookup('env', 'RETHINKDB_VERSION') | default('2.3.6', true) }}"
 
     # app container
     app_version: "{{ lookup('env', 'APP_VERSION') | default('latest', true) }}" # the docker image version
@@ -19,6 +24,8 @@
 
     # app env
     ensure_data_enabled: "{{ lookup('env', 'ENSURE_DATA_ENABLED') | default('false', true) }}"
+    secret_key: "{{ lookup('env', 'SECRET_KEY') | default('secret', true) }}"
+    encrypt_key: "{{ lookup('env', 'ENCRYPT_KEY') | default('encrypt', true) }}"
 
   tasks:
     - name: Create directories for the project
@@ -41,6 +48,16 @@
         env:
           NEO4J_AUTH: "none"
 
+    - name: Start Rethinkdb docker container
+      tags:
+        - run
+      docker_container:
+        name: "{{ rethinkdb_container_name }}"
+        image: "neo4j:{{ rethinkdb_version }}"
+        state: "{{ container_state }}"
+        volumes:
+          - "{{ rethinkdb_dir }}:/data"
+
     - name: Start app docker container
       tags:
         - run
@@ -53,8 +70,14 @@
         pull: True
         links:
           - "{{ neo4j_container_name }}:neo4j"
+          - "{{ rethinkdb_container_name }}:rethinkdb"
         env:
           ENSURE_DATA_ENABLED: "{{ ensure_data_enabled }}"
           NEO4J_SERVER: neo4j
           NEO4J_PORT: 7687
           NEO4J_USER: neo4j
+          RETHINKDB_HOST: rethinkdb
+          RETHINKDB_PORT: 28015
+          RETHINKDB_DB: genealogy
+          SECRET_KEY: "{{ secret_key }}"
+          ENCRYPT_KEY: "{{ encrypt_key }}"
