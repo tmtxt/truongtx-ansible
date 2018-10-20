@@ -53,7 +53,7 @@
         - run
       docker_container:
         name: "{{ rethinkdb_container_name }}"
-        image: "neo4j:{{ rethinkdb_version }}"
+        image: "rethinkdb:{{ rethinkdb_version }}"
         state: "{{ container_state }}"
         volumes:
           - "{{ rethinkdb_dir }}:/data"
