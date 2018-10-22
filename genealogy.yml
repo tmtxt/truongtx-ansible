@@ -63,7 +63,7 @@
         - run
       docker_container:
         name: "{{ app_container_name }}"
-        image: "tmtxt/genealogy:{{ app_version }}"
+        image: "tmtxt/tvgp:{{ app_version }}"
         state: "{{ container_state }}"
         published_ports:
           - "{{ server_port }}:80"
