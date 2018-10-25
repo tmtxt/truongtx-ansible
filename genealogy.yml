@@ -7,6 +7,7 @@
     app_dir: "{{ lookup('env', 'APP_DIR') | default('/mnt/data1/genealogy', true) }}"
     neo4j_dir: "{{ app_dir }}/neo4j"
     rethinkdb_dir: "{{ app_dir }}/rethinkdb"
+    pictures_dir: "{{ app_dir }}/pictures"
     container_state: "{{ lookup('env', 'CONTAINER_STATE') | default('started', true) }}"
 
     # neo4j container
@@ -71,6 +72,8 @@
         links:
           - "{{ neo4j_container_name }}:neo4j"
           - "{{ rethinkdb_container_name }}:rethinkdb"
+        volumes:
+          - "{{ pictures_dir }}:/usr/src/app/pictures"
         env:
           ENSURE_DATA_ENABLED: "{{ ensure_data_enabled }}"
           NEO4J_SERVER: neo4j

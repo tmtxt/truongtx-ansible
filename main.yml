@@ -159,9 +159,6 @@
           - site_name: giapha
             server_name: giapha.truongtx.me
             server_port: 47364
-            basic_auth: true
-            basic_auth_user: giapha
-            basic_auth_password: "{{ giapha_web_password }}"
 
     - include_role:
         name: jenkins-docker
