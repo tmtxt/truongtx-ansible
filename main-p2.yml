@@ -1,0 +1,12 @@
+---
+- hosts: p2
+  tasks:
+    - include_role:
+        name: ufw
+      become: true
+      vars:
+        allowed_ports:
+          - 80                  # http
+          - 443
+          - 17492
+          - 17493

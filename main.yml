@@ -126,6 +126,8 @@
           - 25565               # minecraft
           - 6800                # aria2
           - 25598               # aria2 webui
+          - 443
+          - 9700
 
     - include_role:
         name: nginx-sites
