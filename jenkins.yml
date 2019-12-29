@@ -15,6 +15,11 @@
       3330316138393866370a363562326430646430613338646366393363303032643034336132326535
       3136
 
-  tasks:
-    - include_role:
-        name: init
+  roles:
+    - role: init
+    - role: swapfile
+      become: True
+      vars:
+        swapfile_size: 2G
+        swapfile_swappiness: 10
+        swapfile_vfs_cache_pressure: 50
