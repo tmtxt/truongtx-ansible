@@ -23,3 +23,14 @@
         swapfile_size: 2G
         swapfile_swappiness: 10
         swapfile_vfs_cache_pressure: 50
+
+  tasks:
+    - name: Install Open JDK 11
+      apt: name=openjdk-11-jdk
+      become: True
+
+    - name: Add apt key for Jenkins
+      become: True
+      apt_key:
+        url: https://pkg.jenkins.io/debian/jenkins.io.key
+        state: present

@@ -1,4 +1,4 @@
-Steps to run on new VPS to create `tmtxt` user
+Steps to run on new VPS to create `tmtxt` user, apply for all VPS
 
 SSH to the VPS and run these commands
 
