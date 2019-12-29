@@ -17,6 +17,7 @@
 
   roles:
     - role: init
+
     - role: swapfile
       become: True
       vars:
@@ -34,3 +35,23 @@
       apt_key:
         url: https://pkg.jenkins.io/debian/jenkins.io.key
         state: present
+
+    - name: Add Jenkins apt repo
+      become: true
+      apt_repository:
+        repo: deb https://pkg.jenkins.io/debian binary/
+        state: present
+        update_cache: true
+
+    - name: Install Jenkins
+      become: true
+      apt: name=jenkins
+      notify:
+        - Restart Jenkins
+
+  handlers:
+    - name: Restart Jenkins
+      become: True
+      service:
+        name: jenkins
+        state: restarted
