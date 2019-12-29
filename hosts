@@ -1,6 +1,6 @@
+# -*- mode: conf -*-
 p1 ansible_host=p1.truongtx.me ansible_user=tmtxt
 p2 ansible_host=p2.truongtx.me ansible_user=tmtxt
+jenkins ansible_host=jenkins.truongtx.me ansible_user=tmtxt
 
 localhost ansible_connection=local
-
-kagi ansible_host=51.15.240.48 ansible_user=kagi

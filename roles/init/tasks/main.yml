@@ -5,29 +5,30 @@
 
 - name: Install apt packages
   become: yes
-  apt: name={{ item }}
-  with_items:
-    - zsh
-    - git
-    - nginx
-    - libffi-dev
-    - libssl-dev
-    - ufw
-    - apt-transport-https
-    - python-pip
-    - zip
-    - pass
+  apt:
+    pkg:
+      - zsh
+      - git
+      - nginx
+      - libffi-dev
+      - libssl-dev
+      - ufw
+      - apt-transport-https
+      - python-pip
+      - zip
+      - pass
+    state: present
 
 - name: Install python packages
   become: yes
-  pip: name={{ item }}
-  with_items:
-    - pyopenssl
-    - ndg-httpsclient
-    - pyasn1
-    - ansible
-    - passlib
-    - docker
+  pip:
+    name:
+      - pyopenssl
+      - ndg-httpsclient
+      - pyasn1
+      - ansible
+      - passlib
+      - docker
 
 - name: Clone dotfiles
   git:
