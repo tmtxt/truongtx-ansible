@@ -1,65 +1,32 @@
 ---
-- name: add apt key for jenkins
-  become: yes
-  apt_key: >-
-    url=http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key
-    state=present
+- name: Install Open JDK 11
+  apt: name=openjdk-11-jdk
+  become: True
 
-- name: add apt repo for jenkins
-  become: yes
-  apt_repository:
-    repo: "deb http://pkg.jenkins-ci.org/debian binary/"
+- name: Add apt key for Jenkins
+  become: True
+  apt_key:
+    url: https://pkg.jenkins.io/debian/jenkins.io.key
     state: present
-    update_cache: yes
 
-- name: install jenkins
-  become: yes
+- name: Add Jenkins apt repo
+  become: true
+  apt_repository:
+    repo: deb https://pkg.jenkins.io/debian binary/
+    state: present
+    update_cache: true
+
+- name: Install Jenkins
+  become: true
   apt: name=jenkins
+  notify:
+    - Restart Jenkins
 
-- name: update jenkins running port
-  become: yes
+- name: Update jenkins running port
+  become: true
   lineinfile: >-
     dest=/etc/default/jenkins
     regexp=^HTTP_PORT=
-    line=HTTP_PORT={{ jenkins_port }}
+    line=HTTP_PORT=80
   notify:
-    - restart jenkins
-
-- name: create log folder for nginx jenkins
-  become: yes
-  file: path=/var/log/nginx/jenkins state=directory
-
-- name: create nginx config
-  become: yes
-  template: >-
-    src=nginx-site
-    dest=/etc/nginx/sites-available/{{ jenkins_site_name }}
-  notify:
-    - restart nginx
-
-- name: disable default site
-  become: yes
-  file: >-
-    path=/etc/nginx/sites-enabled/default
-    state=absent
-  notify:
-    - restart nginx
-
-- name: enable project site
-  become: yes
-  file: >-
-    dest=/etc/nginx/sites-enabled/{{ jenkins_site_name }}
-    src=/etc/nginx/sites-available/{{ jenkins_site_name }}
-    state=link
-  notify:
-    - restart nginx
-
-- name: add password for jenkins user
-  become: yes
-  user: name=jenkins password={{ jenkins_password }}
-
-- name: grant sudo access for jenkins user
-  become: yes
-  lineinfile: >-
-    dest=/etc/sudoers
-    line="jenkins ALL=(ALL:ALL) ALL"
+    - Restart Jenkins

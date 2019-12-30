@@ -9,7 +9,6 @@
     pkg:
       - zsh
       - git
-      - nginx
       - libffi-dev
       - libssl-dev
       - ufw
