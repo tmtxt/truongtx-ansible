@@ -10,9 +10,15 @@
     server_port: "{{ lookup('env', 'SERVER_PORT') | default('4000', true) }}"
 
   tasks:
+    - name: Get current user uid
+      command: id -u
+      register: user_id_res
+
     - name: Clone blog repo
       git:
         repo: https://github.com/tmtxt/tmtxt.github.com.git
+      command: id -u
+      register: user_id_res
         dest: "{{ repo_dir }}"
 
     - name: Start/Restart docker container for jekyll blog
@@ -26,5 +32,5 @@
         published_ports:
           - "{{ server_port }}:4000"
         command: "jekyll serve -D"
-        # env:
-        #   JEKYLL_UID: "{{ user_id_res.stdout }}"
+        env:
+          JEKYLL_UID: "{{ user_id_res.stdout }}"
