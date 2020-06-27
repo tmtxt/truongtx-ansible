@@ -2,7 +2,7 @@
 # setup jekyll server in docker for truongtx blog
 - hosts: p1
   vars:
-    ansible_user: tmtxt
+    ansible_user: jekyll
 
     server_dir: "{{ lookup('env', 'SERVER_DIR') | default('/home/tmtxt/jekyll', true) }}"
     container_name: "{{ lookup('env', 'CONTAINER_NAME') | default('jekyll', true) }}"
