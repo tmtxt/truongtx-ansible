@@ -17,8 +17,6 @@
     - name: Clone blog repo
       git:
         repo: https://github.com/tmtxt/tmtxt.github.com.git
-      command: id -u
-      register: user_id_res
         dest: "{{ repo_dir }}"
 
     - name: Start/Restart docker container for jekyll blog
